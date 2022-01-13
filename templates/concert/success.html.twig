@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ConcertController!{% endblock %}
+
+{% block body %}
+
+
+<div>
+    <div class="alert alert-success" role="alert">
+        Votre concert a bien été créé, vous pouvez le retrouver sur <a href="{{path('show_concert', {'id' : concert.id})}}" class="alert-link">{{concert.name}}</a>. 
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}Edit Member{% endblock %}
+
+{% block body %}
+    <h1>Edit Member</h1>
+
+    {{ include('member/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    <div class="d-flex mt-5">
+        <a href="{{ path('member_index') }}" class="btn btn-outline-warning mr-5">< Retourner à la liste</a>
+        {{ include('member/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

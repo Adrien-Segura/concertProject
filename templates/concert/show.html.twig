@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ConcertController!{% endblock %}
+
+{% block body %}
+
+
+<div>
+    <h1>Voici le concert "{{ concert.name }}" !</h1>
+    
+    <h3>Il se compose de {{concert.bands.count()}} groupe(s)</h3>
+
+    <div class="d-flex justify-content-between">
+    {% for band in concert.bands %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{band.name}}</h5>
+                <a href="{{path('band_show', {'id' : band.id})}}" class="btn btn-primary">Page du groupe</a>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}
