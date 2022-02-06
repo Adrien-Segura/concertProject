@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{% block title %}
+  New Room
+{% endblock %}
+
+{% block body %}
+  <h1>
+    Create new Room
+  </h1>
+
+  {{ include('room/_form.html.twig') }}
+
+  <a href="{{ path('room_index') }}" class="btn btn-outline-warning mr-5 mt-5">
+    < Retourner à la liste
+  </a>
+{% endblock %}

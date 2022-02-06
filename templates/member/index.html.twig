@@ -1,39 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Member index{% endblock %}
+{% block title %}
+  Member index
+{% endblock %}
 
 {% block body %}
-    <h1>Member index</h1>
+  <h1>
+    Member index
+  </h1>
+  {% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('member_new') }}" class="btn btn-success">
+      Créer un nouveau membre
+    </a>
+  {% endif %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Actions</th>
-                <th>Attention !</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for member in members %}
-            <tr>
-                <td>{{ member.id }}</td>
-                <td>{{ member.name }}</td>
-                <td>
-                    <a href="{{ path('member_show', {'id': member.id}) }}" class="btn btn-primary mr-2">Voir</a>
-                    <a href="{{ path('member_edit', {'id': member.id}) }}" class="btn btn-info mr-2">Modifier</a>
-                </td>
-                <td>
-                    {{ include('member/_delete_form.html.twig') }}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('member_new') }}" class="btn btn-success">Créer un nouveau membre</a>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          Id
+        </th>
+        <th>
+          Nom
+        </th>
+        <th>
+          Actions
+        </th>
+        {% if is_granted('ROLE_ADMIN') %}
+          <th>
+            Attention !
+          </th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for member in members %}
+        <tr>
+          <td>
+            {{ member.id }}
+          </td>
+          <td>
+            {{ member.name }}
+          </td>
+          <td>
+            <a href="{{
+              path(
+                'member_show',
+                {
+                  id: member.id
+                }
+              )
+              }}"
+              class="btn btn-primary mr-2">
+              Voir
+            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+              <a href="{{
+                path(
+                  'member_edit',
+                  {
+                    id: member.id
+                  }
+                )
+                }}"
+                class="btn btn-info mr-2">
+                Modifier
+              </a>
+            {% endif %}
+          </td>
+          <td>
+            {% if is_granted('ROLE_ADMIN') %}
+              {{ include('member/_delete_form.html.twig') }}
+            {% endif %}
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="3">
+            no records found
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

@@ -1,24 +1,125 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ConcertController!{% endblock %}
+{% block title %}
+  Hello ConcertController!
+{% endblock %}
 
 {% block body %}
+  <div>
+    <h1>
+      Voici le concert "{{ concert.name }}" !
+    </h1>
 
+    <h3>
+      Il se compose de {{ concert.bands.count() }} groupe(s)
+    </h3>
 
-<div>
-    <h1>Voici le concert "{{ concert.name }}" !</h1>
-    
-    <h3>Il se compose de {{concert.bands.count()}} groupe(s)</h3>
+    <div class="d-flex justify-content-between mb-5">
+      {% for band in concert.bands %}
+        <div class="card w-25">
+          <div class="card-body">
+            <h5 class="card-title text-center">
+              {{ band.name }}
+            </h5>
+            <div class="d-flex flex-column">
+              <img src="{{ asset(band.picture.url) }}"
+                alt="{{ band.picture.alternativeName }}" />
+              <a href="{{
+                path(
+                  'band_show',
+                  {
+                    id: band.id
+                  }
+                )
+                }}"
+                class="btn btn-primary mt-3">
+                Page du groupe
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <h3 class="mt-5">
+      Il se compose de {{ concert.members.count() }} artiste(s)
+    </h3>
 
     <div class="d-flex justify-content-between">
-    {% for band in concert.bands %}
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{band.name}}</h5>
-                <a href="{{path('band_show', {'id' : band.id})}}" class="btn btn-primary">Page du groupe</a>
-            </div>
+      {% for member in concert.members %}
+        <div class="card w-25">
+          <div class="card-body">
+            <h5 class="card-title text-center">
+              {{ member.name }}
+            </h5>
+            <a href="{{
+              path(
+                'member_show',
+                {
+                  id: member.id
+                }
+              )
+              }}"
+              class="btn btn-primary w-100">
+              Page du membre
+            </a>
+          </div>
         </div>
-    {% endfor %}
+      {% endfor %}
     </div>
-</div>
+  </div>
+
+  <div class="d-flex mt-5">
+    <a href="{{ path('list_concerts') }}" class="btn btn-outline-warning mr-5">
+      < Retourner à la liste
+    </a>
+    {% if is_granted('ROLE_ADMIN') %}
+      <a href="{{
+        path(
+          'concert_update',
+          {
+            id: concert.id
+          }
+        )
+        }}"
+        class="btn btn-info mr-5">
+        Modifier
+      </a>
+
+      {{ include('concert/_delete_form.html.twig') }}
+    {% endif %}
+    {% if is_granted('ROLE_USER') %}
+        {% if isFavorite %}
+            {{
+          include(
+            'user/_delete_favorite.html.twig',
+            {
+              type: 'concert',
+              object: concert
+            }
+          )
+        }}
+      {% else %}
+        {{
+          include(
+            'user/_add_favorite.html.twig',
+            {
+              type: 'concert',
+              object: concert
+            }
+          )
+        }}
+        {% endif %}
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <footer class="fixed-bottom bg-light p-5">
+    <h4>Salle :</h4>
+    <span>Nom : </span>
+    <a href="{{path('room_show', {id : concert.room.id})}}">{{concert.room.name}}</a><br>
+    <span>Adresse : </span>
+    <a target="_blank" href="https://maps.google.com/?q={{concert.room.adresse}}"/>{{concert.room.adresse}}</a>
+  </footer>
 {% endblock %}

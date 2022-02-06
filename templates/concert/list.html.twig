@@ -1,34 +1,103 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ConcertController!{% endblock %}
+{% block title %}
+  Concerts
+{% endblock %}
 
 {% block body %}
-
-<div class="example-wrapper">
-    <h1>Liste des concerts:</h1>
+  <div class="example-wrapper">
+    <h1>
+      Liste des concerts:
+    </h1>
+    {% if is_granted('ROLE_ADMIN') %}
+      <a href="{{ path('concert_create') }}" class="btn btn-success">
+        Créer un nouveau concert
+      </a>
+    {% endif %}
     <table class="table">
-        <thead>
-            <tr>
-            <th scope="col">Concert</th>
-            <th scope="col">Groupes</th>
-            <th scope="col">Date</th>
-            <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for concert in concerts %}
-                <tr>
-                    <td><a href="{{path('show_concert', {'id' : concert.id})}}">{{concert.name}}</a></td>
-                    <td>{{concert.bands.count()}}</td>
-                    <td>{{concert.date|date('d-m-Y')}}</td>
-                    <td>
-                        <a href="{{path('concert_delete', {'admin_id' : 1, 'id' : concert.id})}}" class="btn btn-danger">Supprimer</a>
-                        <a href="{{path('concert_update', {'admin_id' : 1, 'id' : concert.id})}}" class="btn btn-info">Modifier</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
+      <thead>
+        <tr>
+          <th scope="col">
+            Concert
+          </th>
+          <th scope="col">
+            Groupes
+          </th>
+          <th scope="col">
+            Artistes
+          </th>
+          <th scope="col">
+            Date
+          </th>
+          <th scope="col">
+            Action
+          </th>
+          {% if is_granted('ROLE_ADMIN') %}
+            <th scope="col">
+              Attention !
+            </th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for concert in concerts %}
+          <tr>
+            <td>
+              {{ concert.name }}
+            </td>
+            <td>
+              {{ concert.bands.count() }}
+            </td>
+            <td>
+              {{ concert.members.count() }}
+            </td>
+            <td>
+              {{ concert.date|date('d-m-Y') }}
+            </td>
+            <td>
+              <a href="{{
+                path(
+                  'show_concert',
+                  {
+                    id: concert.id
+                  }
+                )
+                }}"
+                class="btn btn-primary">
+                Voir
+              </a>
+              {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{
+                  path(
+                    'concert_update',
+                    {
+                      id: concert.id
+                    }
+                  )
+                  }}"
+                  class="btn btn-info">
+                  Modifier
+                </a>
+              {% endif %}
+            </td>
+            <td>
+              {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{
+                  path(
+                    'concert_delete',
+                    {
+                      id: concert.id
+                    }
+                  )
+                  }}"
+                  class="btn btn-danger">
+                  Supprimer
+                </a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
     </table>
-    <a href="{{path('concert_create', {'admin_id' : 1})}}">Créer un nouveau concert</a>
-</div>
+  </div>
 {% endblock %}

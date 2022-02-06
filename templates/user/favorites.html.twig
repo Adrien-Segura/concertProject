@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Room
+{% endblock %}
+
+{% block body %}
+  <h1>
+    Favorites
+  </h1>
+
+  <table class="table">
+    <tbody>
+      <tr>
+        <th>
+          Concerts
+        </th>
+        <td>
+          <ul class="list-group list-group-flush">
+            {% for concert in favoriteConcerts %}
+              <li class="list-group-item d-flex justify-content-between">
+                <a href="{{
+                  path(
+                    'show_concert',
+                    {
+                      id: concert.id
+                    }
+                  )
+                  }}">
+                  {{ concert.name }}
+                </a>
+                {{
+                  include(
+                    'user/_delete_favorite.html.twig',
+                    {
+                      type: 'concert',
+                      object: concert
+                    }
+                  )
+                }}
+              </li>
+            {% else %}
+              <li class="list-group-item">Aucun concert favoris</li>
+            {% endfor %}
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Groupes
+        </th>
+        <td>
+          <ul class="list-group list-group-flush">
+            {% for band in favoriteBands %}
+              <li class="list-group-item d-flex justify-content-between">
+                <a href="{{
+                  path(
+                    'band_show',
+                    {
+                      id: band.id
+                    }
+                  )
+                  }}">
+                  {{ band.name }}
+                </a>
+                {{
+                  include(
+                    'user/_delete_favorite.html.twig',
+                    {
+                      type: 'band',
+                      object: band
+                    }
+                  )
+                }}
+              </li>
+            {% else %}
+              <li class="list-group-item">Aucun groupe favoris</li>
+            {% endfor %}
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Artistes
+        </th>
+        <td>
+          <ul class="list-group list-group-flush">
+            {% for member in favoriteMembers %}
+              <li class="list-group-item d-flex justify-content-between">
+                <a href="{{
+                  path(
+                    'member_show',
+                    {
+                      id: member.id
+                    }
+                  )
+                  }}">
+                  {{ member.name }}
+                </a>
+                {{
+                  include(
+                    'user/_delete_favorite.html.twig',
+                    {
+                      type: 'member',
+                      object: member
+                    }
+                  )
+                }}
+              </li>
+            {% else %}
+              <li class="list-group-item">Aucun artiste favoris</li>
+            {% endfor %}
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+{% endblock %}

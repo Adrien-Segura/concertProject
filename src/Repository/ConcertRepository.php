@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Concert;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -56,6 +57,7 @@ class ConcertRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->andWhere('c.date < :date')
             ->setParameter('date', new DateTime())
+            ->orderBy('c.date', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -65,6 +67,37 @@ class ConcertRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->andWhere('c.date > :date')
             ->setParameter('date', new DateTime())
+            ->orderBy('c.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllComingByPage($page, $limit)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->andWhere('c.date > :date')
+            ->setParameter('date', new DateTime())
+            ->orderBy('c.date', 'ASC')
+            ->getQuery();
+        $paginator = new Paginator($query);
+
+        $paginator
+            ->getQuery()
+            ->setFirstResult($limit * ($page - 1))
+            ->setMaxResults($limit);
+
+        return $paginator;
+    }
+
+    public function findAllComingByBand($band_id)
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.bands', 'b')
+            ->andWhere('c.date > :date')
+            ->andWhere('b.id = :b_id')
+            ->setParameter('date', new DateTime())
+            ->setParameter('b_id', $band_id)
+            ->orderBy('c.date', 'ASC')
             ->getQuery()
             ->getResult();
     }

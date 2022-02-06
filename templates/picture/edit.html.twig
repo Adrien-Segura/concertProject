@@ -1,13 +1,43 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Edit Picture{% endblock %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{% block title %}
+  Edit Picture
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Picture</h1>
+  <h1>
+    Edit Picture
+  </h1>
 
-    {{ include('picture/_form.html.twig', {'button_label': 'Update'}) }}
+  {{
+    include(
+      'picture/_form.html.twig',
+      {
+        button_label: 'Modifier'
+      }
+    )
+  }}
+  <div class="mt-5">
+    <h3>
+      Ancienne Image
+    </h3>
+    <img class="w-25"
+      src="{{ asset(picture.url) }}"
+      alt="{{ picture.alternativeName }}" />
+  </div>
 
-    <a href="{{ path('picture_index') }}">back to list</a>
-
+  <div class="d-flex mt-5">
+    <a href="{{ path('picture_index') }}" class="btn btn-outline-warning mr-5">
+      < Retourner à la liste
+    </a>
     {{ include('picture/_delete_form.html.twig') }}
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <script>
+    $('.custom-file-input').on('change', function(event) { var inputFile =
+    event.currentTarget; $(inputFile).parent() .find('.custom-file-label')
+    .html(inputFile.files[0].name); });
+  </script>
 {% endblock %}

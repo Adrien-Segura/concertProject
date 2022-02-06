@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Concerts à venir
+{% endblock %}
+
+{% block body %}
+  <div class="example-wrapper">
+    <h2>
+      Liste des concerts à venir :
+    </h2>
+    <ul class="list-group">
+      {% for concert in concertsComing %}
+        <li class="list-group-item">
+          Le concert <a href="{{
+            path(
+              'show_concert',
+              {
+                id: concert.id
+              }
+            )
+            }}">
+            <strong>{{ concert.name }}</strong>
+          </a> est prévu le <strong>{{ concert.date|date('d/m/Y') }}</strong>
+        </li>
+      {% else %}
+        <li>Aucun concert à venir</li>
+      {% endfor %}
+    </ul>
+    {% if maxPages > 1 %}
+      <div class="d-flex justify-content-center mt-5">
+        <ul class="pagination">
+          <li class="page-item {{ thisPage == 1 ? 'disabled' }}">
+            <a class="page-link"
+              href="{{
+              path(
+                'upcoming_concert',
+                {
+                  page: thisPage - 1 < 1 ? 1 : thisPage - 1
+                }
+              )
+              }}">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Précédent</span>
+            </a>
+          </li>
+
+          {% for i in 1..maxPages %}
+            <li class="page-item {{ thisPage == i ? 'active' }}">
+              <a class="page-link"
+                href="{{
+                path(
+                  'upcoming_concert',
+                  {
+                    page: i
+                  }
+                )
+                }}">
+                {{ i }}
+              </a>
+            </li>
+          {% endfor %}
+
+          <li class="page-item {{ thisPage == maxPages ? 'disabled' }}">
+            <a class="page-link"
+              href="{{
+              path(
+                'upcoming_concert',
+                {
+                  page: thisPage + 1 <= maxPages ? thisPage + 1 : thisPage
+                }
+              )
+              }}">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Suivant</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

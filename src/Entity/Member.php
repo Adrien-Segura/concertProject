@@ -34,10 +34,16 @@ class Member
      */
     private $band;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="favoriteMembers")
+     */
+    private $users;
+
 
     public function __construct()
     {
         $this->concerts = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,6 +98,33 @@ class Member
     public function setBand(?Band $band): self
     {
         $this->band = $band;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addFavoriteMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeFavoriteMember($this);
+        }
 
         return $this;
     }

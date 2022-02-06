@@ -39,6 +39,11 @@ class Room
      */
     private $name;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $adresse;
+
     public function __construct()
     {
         $this->concerts = new ArrayCollection();
@@ -111,6 +116,18 @@ class Room
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): self
+    {
+        $this->adresse = $adresse;
 
         return $this;
     }

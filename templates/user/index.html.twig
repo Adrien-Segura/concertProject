@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+<table class="table">
+        <tbody>
+            <tr>
+                <th>FirstName</th>
+                <td>{{ app.user.firstName }}</td>
+            </tr>
+            <tr>
+                <th>LastName</th>
+                <td>{{ app.user.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ app.user.email }}</td>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>
+                    {{app.user.roles|join(", ")}}
+                </td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>
+                    <span>******</span>
+                    <a class="btn btn-info ml-5" href="{{path('user_change_password')}}">Modifier le mot de passe</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+{% endblock %}

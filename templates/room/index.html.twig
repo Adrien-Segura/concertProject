@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Picture index
+  Room index
 {% endblock %}
 
 {% block body %}
   <h1>
-    Picture index
+    Room index
   </h1>
   {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('picture_new') }}" class="btn btn-success">
-      Ajouter une nouvelle photo
+    <a href="{{ path('room_new') }}" class="btn btn-success">
+      Créer une nouvelle salle
     </a>
   {% endif %}
   <table class="table">
@@ -20,47 +20,43 @@
           Id
         </th>
         <th>
-          Name
+          Nombre de place
         </th>
         <th>
-          AlternativeName
+          Nom
         </th>
         <th>
-          Picture
+          Adresse
         </th>
         <th>
           Actions
         </th>
-        {% if is_granted('ROLE_ADMIN') %}
-          <th>
-            Attention !
-          </th>
-        {% endif %}
+        <th>
+          Attention !
+        </th>
       </tr>
     </thead>
     <tbody>
-      {% for picture in pictures %}
+      {% for room in rooms %}
         <tr>
           <td>
-            {{ picture.id }}
+            {{ room.id }}
           </td>
           <td>
-            {{ picture.name }}
+            {{ room.placesNumber }}
           </td>
           <td>
-            {{ picture.alternativeName }}
+            {{ room.name }}
           </td>
           <td>
-            <img class="w-50"
-              src="{{ asset(picture.url) }}"
-              alt="{{ picture.alternativeName }}" />
+            <a target="_blank" href="https://maps.google.com/?q={{room.adresse}}"/>{{room.adresse}}</a>
           </td>
           <td>
             <a href="{{
               path(
-                'picture_show',
+                'room_show',
                 {
-                  id: picture.id
+                  id: room.id
                 }
               )
               }}"
@@ -70,9 +66,9 @@
             {% if is_granted('ROLE_ADMIN') %}
               <a href="{{
                 path(
-                  'picture_edit',
+                  'room_edit',
                   {
-                    id: picture.id
+                    id: room.id
                   }
                 )
                 }}"
@@ -83,7 +79,7 @@
           </td>
           <td>
             {% if is_granted('ROLE_ADMIN') %}
-              {{ include('picture/_delete_form.html.twig') }}
+              {{ include('room/_delete_form.html.twig') }}
             {% endif %}
           </td>
         </tr>

@@ -14,25 +14,19 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class MemberType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
+    public function buildForm(
+        FormBuilderInterface $builder,
+        array $options
+    ): void {
         $builder
             ->add('name', TextType::class, [
-                "label" => "Nom du membre"
-            ])
-            ->add('concerts', EntityType::class, [
-                "class" => Concert::class,
-                'choice_label' => 'name',
-                'multiple' => true,
-                'required' => false
+                'label' => 'Nom du membre',
             ])
             ->add('band', EntityType::class, [
                 'class' => Band::class,
                 'choice_label' => 'name',
-                'required' => false
-            ])
-
-        ;
+                'required' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

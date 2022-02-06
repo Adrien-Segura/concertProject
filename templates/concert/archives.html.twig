@@ -1,22 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ConcertController!{% endblock %}
+{% block title %}
+  Hello ConcertController!
+{% endblock %}
 
 {% block body %}
-
-<div class="example-wrapper">
-    <h2>Liste des concerts passés :</h2>
-    <ul>
-        {% for concert in concertsPassed %}
-            <li>Le concert <strong>{{concert.name}}</strong> est passé le <strong>{{concert.date|date("d/m/Y à H:i:s")}}</strong></li>
-        {% endfor %}
+  <div class="example-wrapper">
+    <h2>
+      Liste des concerts passés :
+    </h2>
+    <ul class="list-group">
+      {% for concert in concertsPassed %}
+        <li class="list-group-item">
+          Le concert <a href="{{
+            path(
+              'show_concert',
+              {
+                id: concert.id
+              }
+            )
+            }}">
+            <strong>{{ concert.name }}</strong>
+          </a> est passé le <strong>{{ concert.date|date('d/m/Y') }}</strong>
+        </li>
+      {% endfor %}
     </ul>
 
-    <h2>Liste des concerts à venir :</h2>
-    <ul>
-        {% for concert in concertsComing %}
-            <li>Le concert <strong>{{concert.name}}</strong> est prévu le <strong>{{concert.date|date("d/m/Y à H:i:s")}}</strong></li>
-        {% endfor %}
+    <h2>
+      Liste des concerts à venir :
+    </h2>
+    <ul class="list-group">
+      {% for concert in concertsComing %}
+        <li class="list-group-item">
+          Le concert <a href="{{
+            path(
+              'show_concert',
+              {
+                id: concert.id
+              }
+            )
+            }}">
+            <strong>{{ concert.name }}</strong>
+          </a> est prévu le <strong>{{ concert.date|date('d/m/Y') }}</strong>
+        </li>
+      {% endfor %}
     </ul>
-</div>
+  </div>
 {% endblock %}

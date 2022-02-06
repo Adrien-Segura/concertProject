@@ -1,0 +1,14 @@
+<form method="post"
+  action="{{
+  path(
+    'add_favorite_' ~ type,
+    {
+      id: object.id
+    }
+  )
+  }}">
+  <input type="hidden"
+    name="_token"
+    value="{{ csrf_token('addFavorite' ~ object.id) }}" />
+  <button class="ml-5 btn btn-success">Ajouter aux favoris</button>
+</form>

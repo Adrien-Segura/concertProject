@@ -34,7 +34,6 @@ class Concert
      */
     private $room;
 
-
     /**
      * @ORM\ManyToMany(targetEntity=Member::class, inversedBy="concerts")
      */
@@ -45,12 +44,17 @@ class Concert
      */
     private $bands;
 
-    
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="favoriteConcerts")
+     */
+    private $users;
 
     public function __construct()
     {
         $this->bands = new ArrayCollection();
         $this->members = new ArrayCollection();
+        $this->favorisConcerts = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -93,8 +97,6 @@ class Concert
 
         return $this;
     }
-
-    
 
     /**
      * @return Collection|member[]
@@ -140,6 +142,33 @@ class Concert
     public function removeBand(band $band): self
     {
         $this->bands->removeElement($band);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addFavoriteConcert($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeFavoriteConcert($this);
+        }
 
         return $this;
     }

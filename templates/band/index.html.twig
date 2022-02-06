@@ -1,41 +1,91 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Band index{% endblock %}
+{% block title %}
+  Band index
+{% endblock %}
 
 {% block body %}
-    <h1>Band index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Membres</th>
-                <th>Actions</th>
-                <th>Attention !</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for band in bands %}
-            <tr>
-                <td>{{ band.id }}</td>
-                <td>{{ band.name }}</td>
-                <td>{{ band.members.count }}</td>
-                <td>
-                    <a href="{{ path('band_show', {'id': band.id}) }}" class="btn btn-primary mr-2">Voir</a>
-                    <a href="{{ path('band_edit', {'id': band.id}) }}" class="btn btn-info mr-2">Modifier</a>
-                </td>
-                <td>
-                    {{ include('band/_delete_form.html.twig') }}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('band_new') }}" class="btn btn-success">Créer un nouveau groupe</a>
+  <h1>
+    Band index
+  </h1>
+  {% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('band_new') }}" class="btn btn-success">
+      Créer un nouveau groupe
+    </a>
+  {% endif %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          Id
+        </th>
+        <th>
+          Nom
+        </th>
+        <th>
+          Membres
+        </th>
+        <th>
+          Actions
+        </th>
+        {% if is_granted('ROLE_ADMIN') %}
+          <th>
+            Attention !
+          </th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for band in bands %}
+        <tr>
+          <td>
+            {{ band.id }}
+          </td>
+          <td>
+            {{ band.name }}
+          </td>
+          <td>
+            {{ band.members.count }}
+          </td>
+          <td>
+            <a href="{{
+              path(
+                'band_show',
+                {
+                  id: band.id
+                }
+              )
+              }}"
+              class="btn btn-primary mr-2">
+              Voir
+            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+              <a href="{{
+                path(
+                  'band_edit',
+                  {
+                    id: band.id
+                  }
+                )
+                }}"
+                class="btn btn-info mr-2">
+                Modifier
+              </a>
+            {% endif %}
+          </td>
+          <td>
+            {% if is_granted('ROLE_ADMIN') %}
+              {{ include('band/_delete_form.html.twig') }}
+            {% endif %}
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="3">
+            no records found
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
